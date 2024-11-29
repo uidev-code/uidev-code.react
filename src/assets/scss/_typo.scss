@@ -1,0 +1,59 @@
+@use "./config" as *;
+
+html {
+  @include fontSmooth;
+}
+
+body {
+  color: var(--color-contrast-high);
+  font-family: var(--font-primary);
+  font-size: var(--text-base);
+  line-height: 1.4;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  color: var(--color-contrast-higher);
+  font-weight: 900;
+  line-height: 1.2;
+}
+
+h1 {
+  font-size: var(--text-3xl);
+}
+
+h2 {
+  font-size: var(--text-2xl);
+}
+
+h3 {
+  font-size: var(--text-xl);
+  font-weight: 700;
+}
+
+h4 {
+  font-size: var(--text-lg);
+  font-weight: 700;
+}
+
+small {
+  font-size: var(--text-small);
+}
+
+em {
+  font-style: italic;
+}
+
+strong {
+  font-weight: bold;
+}
+
+s {
+  text-decoration: line-through;
+}
+
+u {
+  text-decoration: underline;
+}

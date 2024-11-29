@@ -7,10 +7,17 @@ const config: StorybookConfig = {
     "@storybook/addon-essentials",
     "@chromatic-com/storybook",
     "@storybook/addon-interactions",
+    "@storybook/addon-storysource",
+    "@whitespace/storybook-addon-html",
+    "@storybook/addon-a11y",
+    "storybook-addon-performance",
+    "@storybook/addon-designs",
+    "@storybook/addon-highlight",
   ],
   framework: {
     name: "@storybook/react-vite",
     options: {},
   },
+  staticDirs: ["../src/assets"],
 };
 export default config;

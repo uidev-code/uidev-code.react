@@ -1,0 +1,276 @@
+@use "config" as *;
+@use "sass:math";
+@use "sass:string";
+@use "sass:list";
+@use "sass:map";
+
+:root {
+  // space
+  --space-unit: 1rem;
+  @each $name, $value in $spacing-md {
+    --space-#{$name}: #{$value};
+  }
+
+  // text
+  @each $name, $value in $text-md {
+    --text-#{$name}: #{$value};
+  }
+
+  // radius
+  @each $name, $value in $radius {
+    --radius-#{$name}: #{$value};
+  }
+
+  // shadow
+  @each $name, $value in $shadow {
+    --shadow-#{$name}: #{$value};
+  }
+
+  // shadow
+  @each $name, $value in $inner-glow {
+    --inner-#{$name}: #{$value};
+  }
+
+  // ease
+  @each $name, $value in $ease {
+    --ease-#{$name}: #{$value};
+  }
+
+  // font
+  @each $name, $value in $font {
+    --font-#{$name}: #{$value};
+  }
+}
+
+// colors
+@each $theme, $color-array in $colors {
+  $theme-selector: "[data-theme=#{$theme}]";
+  @if $theme == "default" {
+    $theme-selector: ':root, [data-theme="default"]';
+  }
+
+  #{$theme-selector} {
+    // loop through colors and define variables
+    @each $main-color, $variation-array in $color-array {
+      @each $variation, $hsl in $variation-array {
+        $appendix: #{"-" + $variation};
+        @if $variation == "base" {
+          $appendix: "";
+        }
+        $list: get-hsl-values($hsl);
+        --color-#{$main-color}#{$appendix}-h: #{list.nth($list, 1)};
+        --color-#{$main-color}#{$appendix}-s: #{list.nth($list, 2)};
+        --color-#{$main-color}#{$appendix}-l: #{list.nth($list, 3)};
+        // --color-#{$main-color}#{$appendix}: hsl(#{$hsl});
+        --color-#{$main-color}#{$appendix}: hsl(
+          var(--color-#{$main-color}#{$appendix}-h),
+          var(--color-#{$main-color}#{$appendix}-s),
+          var(--color-#{$main-color}#{$appendix}-l)
+        );
+      }
+    }
+  }
+}
+
+@include min-width("lg") {
+  body {
+    @each $name, $value in $spacing-lg {
+      --space-#{$name}: #{$value};
+    }
+
+    @each $name, $value in $text-lg {
+      --text-#{$name}: #{$value};
+    }
+  }
+}
+
+//
+
+// aspect-ratio
+@each $width, $height in $aspect-ratio {
+  .#{$util-prefix}aspect-ratio-#{$width}\:#{$height} {
+    aspect-ratio: #{$width}/#{$height};
+  }
+}
+
+/* media wrapper */
+:where(
+    [class^="#{$util-prefix}media-wrapper"],
+    [class*=" #{$util-prefix}media-wrapper"]
+  ) {
+  position: relative;
+}
+
+[class^="#{$util-prefix}media-wrapper"],
+[class*=" #{$util-prefix}media-wrapper"] {
+  height: 0;
+}
+
+[class^="#{$util-prefix}media-wrapper"] > *,
+[class*=" #{$util-prefix}media-wrapper"] > * {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+[class^="#{$util-prefix}media-wrapper"] > *:not(iframe),
+[class*=" #{$util-prefix}media-wrapper"] > *:not(iframe) {
+  object-fit: cover;
+}
+
+@each $width, $height in $media-wrapper {
+  .#{$util-prefix}media-wrapper-#{$width}\:#{$height} {
+    padding-bottom: math.div($height, $width) * 100%;
+  }
+}
+
+//  typography
+.#{$util-prefix}truncate,
+.#{$util-prefix}text-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.#{$util-prefix}text-replace {
+  overflow: hidden;
+  color: transparent;
+  text-indent: 100%;
+  white-space: nowrap;
+}
+
+.#{$util-prefix}break-word {
+  overflow-wrap: break-word;
+  min-width: 0;
+}
+
+// grid
+$grid-columns: 12 !default;
+
+.#{$util-prefix}grid {
+  --grid-columns: #{$grid-columns};
+  --column-gap: 0px;
+  --row-gap: 0px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--row-gap) var(--column-gap);
+}
+
+.#{$util-prefix}grid > * {
+  width: 100%;
+  min-width: 0;
+}
+
+$grid-col-class-list: "";
+@for $i from 1 through $grid-columns {
+  $grid-col-class-list: $grid-col-class-list + ".#{$util-prefix}col-#{$i}";
+  @if ($i < $grid-columns) {
+    $grid-col-class-list: $grid-col-class-list + ", ";
+  }
+  .#{$util-prefix}grid-col-#{$i} {
+    --grid-columns: #{$i};
+  }
+
+  .#{$util-prefix}col-#{$i} {
+    --column-span: #{$i};
+  }
+}
+
+#{$grid-col-class-list} {
+  width: calc(
+    (
+        (100% - (var(--grid-columns) - 1) * var(--column-gap)) *
+          var(--column-span) / var(--grid-columns)
+      ) + (var(--column-span) - 1) * var(--column-gap)
+  );
+  flex: initial;
+}
+
+.#{$util-prefix}col {
+  width: auto;
+  flex: 1 1 0;
+}
+
+.#{$util-prefix}col-content {
+  width: auto;
+  flex: 0 1 auto;
+}
+
+$grid-offset-class-list: "";
+@for $i from 1 through $grid-columns - 1 {
+  $grid-offset-class-list: $grid-offset-class-list +
+    ".#{$util-prefix}offset-#{$i}";
+  @if ($i < $grid-columns) {
+    $grid-offset-class-list: $grid-offset-class-list + ", ";
+  }
+  .#{$util-prefix}offset-#{$i} {
+    --column-offset: #{$i};
+  }
+}
+
+#{$grid-offset-class-list} {
+  margin-left: calc(
+    (
+        (100% - (var(--grid-columns) - 1) * var(--column-gap)) *
+          var(--column-offset) / var(--grid-columns)
+      ) + var(--column-offset) * var(--column-gap)
+  );
+}
+
+// gap
+
+.#{$util-prefix}gap-0 {
+  --row-gap: 0px;
+  --column-gap: 0px;
+  gap: 0px;
+}
+
+.#{$util-prefix}gap-x-0 {
+  --column-gap: 0px;
+  column-gap: 0px;
+}
+
+.#{$util-prefix}gap-y-0 {
+  --row-gap: 0px;
+  row-gap: 0px;
+}
+
+@each $name, $value in $spacing-md {
+  .#{$util-prefix}gap-#{$name} {
+    --row-gap: var(--space-#{$name});
+    --column-gap: var(--space-#{$name});
+    gap: var(--row-gap) var(--column-gap);
+  }
+
+  .#{$util-prefix}gap-x-#{$name} {
+    --column-gap: var(--space-#{$name});
+    column-gap: var(--column-gap);
+  }
+
+  .#{$util-prefix}gap-y-#{$name} {
+    --row-gap: var(--space-#{$name});
+    row-gap: var(--row-gap);
+  }
+}
+
+@include min-width("lg") {
+  @each $name, $value in $spacing-lg {
+    .#{$util-prefix}gap-#{$name} {
+      --row-gap: var(--space-#{$name});
+      --column-gap: var(--space-#{$name});
+      gap: var(--row-gap) var(--column-gap);
+    }
+
+    .#{$util-prefix}gap-x-#{$name} {
+      --column-gap: var(--space-#{$name});
+      column-gap: var(--column-gap);
+    }
+
+    .#{$util-prefix}gap-y-#{$name} {
+      --row-gap: var(--space-#{$name});
+      row-gap: var(--row-gap);
+    }
+  }
+}

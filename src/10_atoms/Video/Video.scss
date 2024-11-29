@@ -1,0 +1,11 @@
+@use "../../assets/scss/_config" as *;
+
+[class*="aspect-ratio"] {
+  overflow: hidden;
+
+  & > video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}

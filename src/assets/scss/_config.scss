@@ -1,0 +1,464 @@
+@use "sass:math";
+@use "sass:string";
+@use "sass:list";
+@use "sass:map";
+@use "sass:meta";
+
+// -----------------------------------------------------------
+// functions
+@function str-remove-whitespace($str) {
+  @while (string.index($str, " ") != null) {
+    $index: string.index($str, " ");
+    $str: "#{string.slice($str, 0, $index - 1)}#{string.slice($str, $index + 1)}";
+  }
+  @return $str;
+}
+
+@function str-replace($string, $search, $replace: "") {
+  $index: string.index($string, $search);
+  @if $index {
+    @return string.slice($string, 1, $index - 1) + $replace +
+      str-replace(
+        string.slice($string, $index + string.length($search)),
+        $search,
+        $replace
+      );
+  }
+  @return $string;
+}
+
+@function get-hsl-values($hsl) {
+  $index-1: string.index($hsl, ",");
+  $hue: string.slice($hsl, 1, $index-1 - 1);
+  $list: (#{$hue});
+  $remaining: string.slice($hsl, $index-1 + 1, -1);
+  $index-2: string.index($remaining, ",");
+  $saturation: str-remove-whitespace(string.slice($remaining, 1, $index-2 - 1));
+  $list: list.append($list, #{$saturation});
+  $remaining: str-remove-whitespace(string.slice($remaining, $index-2 + 1, -1));
+  $list: list.append($list, #{$remaining});
+  @return $list;
+}
+
+// return color with different opacity value
+@function alpha($color, $alpha) {
+  $color: str-replace($color, "var(");
+  $color: str-replace($color, ")");
+  $color-h: var(#{$color + "-h"});
+  $color-s: var(#{$color + "-s"});
+  $color-l: var(#{$color + "-l"});
+  @return hsla($color-h, $color-s, $color-l, $alpha);
+}
+
+// return color with different lightness value
+@function lightness($color, $lightness-multiplier) {
+  $color: str-replace($color, "var(");
+  $color: str-replace($color, ")");
+  $color-h: var(#{$color + "-h"});
+  $color-s: var(#{$color + "-s"});
+  $color-l: var(#{$color + "-l"});
+  @return hsl($color-h, $color-s, calc(#{$color-l} * #{$lightness-multiplier}));
+}
+
+// modify color HSLA values
+@function adjust-hsla(
+  $color,
+  $hue-multiplier: 1,
+  $saturation-multiplier: 1,
+  $lightness-multiplier: 1,
+  $alpha: 1
+) {
+  $color: str-replace($color, "var(");
+  $color: str-replace($color, ")");
+  $color-h: var(#{$color + "-h"});
+  $color-s: var(#{$color + "-s"});
+  $color-l: var(#{$color + "-l"});
+  @return hsla(
+    calc(#{$color-h} * #{$hue-multiplier}),
+    calc(#{$color-s} * #{$saturation-multiplier}),
+    calc(#{$color-l} * #{$lightness-multiplier}),
+    $alpha
+  );
+}
+
+@function to-number($value) {
+  @if type-of($value) == "number" {
+    @return $value;
+  } @else if type-of($value) != "string" {
+    $_: log("Value for `to-number` should be a number or a string.");
+  }
+
+  $result: 0;
+  $digits: 0;
+  $minus: string.slice($value, 1, 1) == "-";
+  $numbers: (
+    "0": 0,
+    "1": 1,
+    "2": 2,
+    "3": 3,
+    "4": 4,
+    "5": 5,
+    "6": 6,
+    "7": 7,
+    "8": 8,
+    "9": 9,
+  );
+
+  @for $i from if($minus, 2, 1) through string.length($value) {
+    $character: string.slice($value, $i, $i);
+
+    @if not(index(map-keys($numbers), $character) or $character == ".") {
+      @return to-length(
+        if($minus, -$result, $result),
+        string.slice($value, $i)
+      );
+    }
+
+    @if $character == "." {
+      $digits: 1;
+    } @else if $digits == 0 {
+      $result: $result * 10 + map-get($numbers, $character);
+    } @else {
+      $digits: $digits * 10;
+      $result: $result + math.div(map-get($numbers, $character), $digits);
+    }
+  }
+
+  @return if($minus, -$result, $result);
+}
+
+@function to-length($value, $unit) {
+  $units: (
+    "px": 1px,
+    "cm": 1cm,
+    "mm": 1mm,
+    "%": 1%,
+    "ch": 1ch,
+    "pc": 1pc,
+    "in": 1in,
+    "em": 1em,
+    "rem": 1rem,
+    "pt": 1pt,
+    "ex": 1ex,
+    "vw": 1vw,
+    "vh": 1vh,
+    "vmin": 1vmin,
+    "vmax": 1vmax,
+  );
+
+  @if not index(map-keys($units), $unit) {
+    $_: log("Invalid unit `#{$unit}`.");
+  }
+
+  @return $value * map-get($units, $unit);
+}
+
+// -----------------------------------------------------------
+// mixins
+
+// breakpoints
+@mixin min-width($breakpoint) {
+  @media (min-width: map.get($map: $breakpoints, $key: $breakpoint)) {
+    @content;
+  }
+}
+
+@mixin max-width($breakpoint) {
+  @media not all and (min-width: map.get($map: $breakpoints, $key: $breakpoint)) {
+    @content;
+  }
+}
+
+// reset style
+@mixin reset {
+  background-color: transparent;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  color: inherit;
+  line-height: inherit;
+  appearance: none;
+}
+
+// srHide
+@mixin srHide {
+  position: absolute;
+  clip: rect(1px, 1px, 1px, 1px);
+  clip-path: inset(50%);
+}
+
+// srShow
+@mixin srShow {
+  position: static;
+  clip: auto;
+  clip-path: none;
+}
+
+// edit font rendering
+@mixin fontSmooth {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+// triangle
+@mixin triangle($direction: up, $width: 12px, $color: red) {
+  width: 0;
+  height: 0;
+  border: $width solid transparent;
+
+  @if ($direction == left) {
+    border-right-color: $color;
+  } @else if($direction == right) {
+    border-left-color: $color;
+  } @else if($direction == down) {
+    border-top-color: $color;
+  } @else {
+    border-bottom-color: $color;
+  }
+}
+
+// -----------------------------------------------------------
+// variables
+
+// prefix
+$util-prefix: "" !default;
+
+// breakpoints
+$breakpoints: (
+  "xs": "32rem",
+  "sm": "48rem",
+  "md": "64rem",
+  "lg": "80rem",
+  "xl": "90rem",
+) !default;
+
+// spacing
+$spacing-md: (
+  "4xs": calc(var(--space-unit) * 0.125),
+  "3xs": calc(var(--space-unit) * 0.25),
+  "2xs": calc(var(--space-unit) * 0.375),
+  "xs": calc(var(--space-unit) * 0.5),
+  "sm": calc(var(--space-unit) * 0.75),
+  "md": calc(var(--space-unit) * 1.25),
+  "lg": calc(var(--space-unit) * 2),
+  "xl": calc(var(--space-unit) * 3.25),
+  "2xl": calc(var(--space-unit) * 5.25),
+  "3xl": calc(var(--space-unit) * 8.5),
+  "4xl": calc(var(--space-unit) * 13.75),
+) !default;
+
+$spacing-lg: (
+  "4xs": calc(var(--space-unit) * 0.1875),
+  "3xs": calc(var(--space-unit) * 0.375),
+  "2xs": calc(var(--space-unit) * 0.5625),
+  "xs": calc(var(--space-unit) * 0.75),
+  "sm": calc(var(--space-unit) * 1.125),
+  "md": calc(var(--space-unit) * 1.875),
+  "lg": calc(var(--space-unit) * 3),
+  "xl": calc(var(--space-unit) * 4.875),
+  "2xl": calc(var(--space-unit) * 7.875),
+  "3xl": calc(var(--space-unit) * 12.75),
+  "4xl": calc(var(--space-unit) * 20.625),
+) !default;
+
+// text
+$text-md: (
+  "3xs": 0.5rem,
+  "2xs": 0.625rem,
+  "xs": 0.75rem,
+  "sm": 0.875rem,
+  "base": 1rem,
+  "md": 1.1875rem,
+  "lg": 1.4375rem,
+  "xl": 1.75rem,
+  "2xl": 2.0625rem,
+  "3xl": 2.5rem,
+  "4xl": 3rem,
+  "5xl": 3.625rem,
+) !default;
+
+$text-lg: (
+  "3xs": 0.5rem,
+  "2xs": 0.625rem,
+  "xs": 0.75rem,
+  "sm": 0.9375rem,
+  "base": 1.125rem,
+  "md": 1.375rem,
+  "lg": 1.75rem,
+  "xl": 2.1875rem,
+  "2xl": 2.75rem,
+  "3xl": 3.4375rem,
+  "4xl": 4.25rem,
+  "5xl": 5.3125rem,
+) !default;
+
+// radius
+$radius: (
+  "sm": calc(var(--radius-md) / 2),
+  "md": 0.375em,
+  "lg": calc(var(--radius-md) * 2),
+) !default;
+
+// shadow
+$shadow: (
+  "ring":
+    "0 0 0 1px hsla(var(--color-black-h), var(--color-black-s), var(--color-black-l), 0.05)",
+  "xs":
+    "0 0 0 1px hsla(var(--color-black-h), var(--color-black-s), var(--color-black-l), 0.02), 0 1px 3px -1px hsla(var(--color-black-h), var(--color-black-s), var(--color-black-l), 0.2)",
+  "sm":
+    "0 0.3px 0.4px hsla(var(--color-black-h), var(--color-black-s), var(--color-black-l), 0.02), 0 0.9px 1.5px hsla(var(--color-black-h), var(--color-black-s), var(--color-black-l), 0.045), 0 3.5px 6px hsla(var(--color-black-h), var(--color-black-s), var(--color-black-l), 0.09)",
+  "md":
+    "0 0.9px 1.25px hsla(var(--color-black-h), var(--color-black-s), var(--color-black-l), 0.025), 0 3px 5px hsla(var(--color-black-h), var(--color-black-s), var(--color-black-l), 0.05), 0 12px 20px hsla(var(--color-black-h), var(--color-black-s), var(--color-black-l), 0.09)",
+  "lg":
+    "0 1.2px 1.9px -1px hsla(var(--color-black-h), var(--color-black-s), var(--color-black-l), 0.01), 0 3px 5px -1px hsla(var(--color-black-h), var(--color-black-s), var(--color-black-l), 0.015), 0 8px 15px -1px hsla(var(--color-black-h), var(--color-black-s), var(--color-black-l), 0.05), 0 28px 40px -1px hsla(var(--color-black-h), var(--color-black-s), var(--color-black-l), 0.1)",
+  "xl":
+    "0 1.5px 2.1px -6px hsla(var(--color-black-h), var(--color-black-s), var(--color-black-l), 0.009), 0 3.6px 5.2px -6px hsla(var(--color-black-h), var(--color-black-s), var(--color-black-l), 0.0115), 0 7.3px 10.6px -6px hsla(var(--color-black-h), var(--color-black-s), var(--color-black-l), 0.0125), 0 16.2px 21.9px -6px hsla(var(--color-black-h), var(--color-black-s), var(--color-black-l), 0.025), 0 46px 60px -6px hsla(var(--color-black-h), var(--color-black-s), var(--color-black-l), 0.15)",
+) !default;
+
+// inner-glow
+$inner-glow: (
+  "glow":
+    "inset 0 0 0.5px 1px hsla(var(--color-white-h), var(--color-white-s), var(--color-white-l), 0.075)",
+  "glow-top":
+    "inset 0 1px 0.5px hsla(var(--color-white-h), var(--color-white-s), var(--color-white-l), 0.075)",
+) !default;
+
+// ease
+$ease: (
+  "in-out": cubic-bezier(0.645, 0.045, 0.355, 1),
+  "in": cubic-bezier(0.55, 0.055, 0.675, 0.19),
+  "out": cubic-bezier(0.215, 0.61, 0.355, 1),
+  "out-back": cubic-bezier(0.34, 1.56, 0.64, 1),
+);
+
+// font
+$font: (
+  "primary": "Pretendard, system-ui, sans-serif",
+  "secondary": "'PolySans', 'Inter', system-ui, sans-serif",
+  "font-mono": "'JetBrains Mono', monospace",
+  "system-ui": "system-ui,sans-serif",
+);
+
+// colors
+$colors: (
+  "default": (
+    "primary": (
+      "darker": "250, 84%, 38%",
+      "dark": "250, 84%, 46%",
+      "base": "250, 84%, 54%",
+      "light": "250, 84%, 60%",
+      "lighter": "250, 84%, 67%",
+    ),
+    "accent": (
+      "darker": "342, 89%, 38%",
+      "dark": "342, 89%, 43%",
+      "base": "342, 89%, 48%",
+      "light": "342, 89%, 56%",
+      "lighter": "342, 89%, 62%",
+    ),
+    "black": (
+      "base": "230, 13%, 9%",
+    ),
+    "white": (
+      "base": "0, 0%, 100%",
+    ),
+    "warning": (
+      "darker": "35, 79%, 48%",
+      "dark": "35, 79%, 56%",
+      "base": "35, 79%, 66%",
+      "light": "35, 79%, 74%",
+      "lighter": "35, 79%, 82%",
+    ),
+    "success": (
+      "darker": "170, 78%, 26%",
+      "dark": "170, 78%, 31%",
+      "base": "170, 78%, 36%",
+      "light": "170, 78%, 42%",
+      "lighter": "170, 78%, 47%",
+    ),
+    "error": (
+      "darker": "342, 89%, 38%",
+      "dark": "342, 89%, 43%",
+      "base": "342, 89%, 48%",
+      "light": "342, 89%, 56%",
+      "lighter": "342, 89%, 62%",
+    ),
+    "bg": (
+      "darker": "240, 4%, 90%",
+      "dark": "240, 4%, 95%",
+      "base": "0, 0%, 100%",
+      "light": "0, 0%, 100%",
+      "lighter": "0, 0%, 100%",
+    ),
+    "contrast": (
+      "lower": "240, 4%, 85%",
+      "low": "240, 4%, 65%",
+      "medium": "225, 4%, 47%",
+      "high": "230, 7%, 23%",
+      "higher": "230, 13%, 9%",
+    ),
+  ),
+  "dark": (
+    "primary": (
+      "darker": "250, 100%, 60%",
+      "dark": "250, 100%, 64%",
+      "base": "250, 100%, 69%",
+      "light": "250, 100%, 72%",
+      "lighter": "250, 100%, 76%",
+    ),
+    "accent": (
+      "darker": "342, 92%, 41%",
+      "dark": "342, 92%, 47%",
+      "base": "342, 92%, 54%",
+      "light": "342, 92%, 60%",
+      "lighter": "342, 92%, 65%",
+    ),
+    "black": (
+      "base": "230, 13%, 9%",
+    ),
+    "white": (
+      "base": "0, 0%, 100%",
+    ),
+    "warning": (
+      "darker": "35, 79%, 48%",
+      "dark": "35, 79%, 56%",
+      "base": "35, 79%, 66%",
+      "light": "35, 79%, 74%",
+      "lighter": "35, 79%, 82%",
+    ),
+    "success": (
+      "darker": "170, 78%, 26%",
+      "dark": "170, 78%, 31%",
+      "base": "170, 78%, 36%",
+      "light": "170, 78%, 42%",
+      "lighter": "170, 78%, 47%",
+    ),
+    "error": (
+      "darker": "342, 92%, 41%",
+      "dark": "342, 92%, 47%",
+      "base": "342, 92%, 54%",
+      "light": "342, 92%, 60%",
+      "lighter": "342, 92%, 65%",
+    ),
+    "bg": (
+      "darker": "232, 7%, 8%",
+      "dark": "233, 8%, 11%",
+      "base": "232, 11%, 15%",
+      "light": "233, 8%, 19%",
+      "lighter": "232, 7%, 22%",
+    ),
+    "contrast": (
+      "lower": "240, 6%, 26%",
+      "low": "240, 3%, 41%",
+      "medium": "231, 3%, 57%",
+      "high": "240, 5%, 82%",
+      "higher": "240, 100%, 99%",
+    ),
+  ),
+) !default;
+
+// aspect-ratio
+$aspect-ratio: (16 9, 3 2, 4 3, 5 4, 1 1, 4 5, 3 4, 2 3, 9 16) !default;
+
+// media-wrapper
+$media-wrapper: (16 9, 3 2, 4 3, 1 1) !default;
