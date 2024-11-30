@@ -1,11 +1,12 @@
 import type { Preview } from "@storybook/react";
+import { withThemeByClassName } from "@storybook/addon-themes";
 
 import "./storybook.scss";
-import "../src/assets/scss/_reset.scss";
-import "../src/assets/scss/_fonts.scss";
-import "../src/assets/scss/_typo.scss";
-import "../src/assets/scss/_preview.scss";
-import "../src/assets/scss/_util.scss";
+import "@styles/_reset.scss";
+import "@styles/_fonts.scss";
+import "@styles/_typo.scss";
+import "@styles/_preview.scss";
+import "@styles/_util.scss";
 
 const preview: Preview = {
   parameters: {
@@ -20,8 +21,22 @@ const preview: Preview = {
       storySort: {
         method: "alphabetical",
       },
+      darkMode: {
+        current: "light",
+        darkClass: "lights-out",
+        lightClass: "lights-on",
+      },
     },
   },
+  decorators: [
+    withThemeByClassName({
+      themes: {
+        light: "",
+        dark: "dark",
+      },
+      defaultTheme: "light",
+    }),
+  ],
 };
 
 export default preview;

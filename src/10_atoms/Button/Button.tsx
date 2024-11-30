@@ -65,7 +65,7 @@ export const Button: React.FC<ButtonProps> = ({
         </>
       )}
       {btnIcon && <span className="btn-icon">{btnIcon}</span>}
-      <span className="btn-text">{btnText}</span>
+      {!btnIconOnly && <span className="btn-text">{btnText}</span>}
     </button>
   );
 };

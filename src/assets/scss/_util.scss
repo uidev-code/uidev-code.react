@@ -44,7 +44,7 @@
 
 // colors
 @each $theme, $color-array in $colors {
-  $theme-selector: "[data-theme=#{$theme}]";
+  $theme-selector: ".#{$theme}";
   @if $theme == "default" {
     $theme-selector: ':root, [data-theme="default"]';
   }
@@ -94,10 +94,7 @@
 }
 
 /* media wrapper */
-:where(
-    [class^="#{$util-prefix}media-wrapper"],
-    [class*=" #{$util-prefix}media-wrapper"]
-  ) {
+:where([class^="#{$util-prefix}media-wrapper"], [class*=" #{$util-prefix}media-wrapper"]) {
   position: relative;
 }
 
@@ -180,10 +177,8 @@ $grid-col-class-list: "";
 
 #{$grid-col-class-list} {
   width: calc(
-    (
-        (100% - (var(--grid-columns) - 1) * var(--column-gap)) *
-          var(--column-span) / var(--grid-columns)
-      ) + (var(--column-span) - 1) * var(--column-gap)
+    ((100% - (var(--grid-columns) - 1) * var(--column-gap)) * var(--column-span) / var(--grid-columns)) +
+      (var(--column-span) - 1) * var(--column-gap)
   );
   flex: initial;
 }
@@ -200,8 +195,7 @@ $grid-col-class-list: "";
 
 $grid-offset-class-list: "";
 @for $i from 1 through $grid-columns - 1 {
-  $grid-offset-class-list: $grid-offset-class-list +
-    ".#{$util-prefix}offset-#{$i}";
+  $grid-offset-class-list: $grid-offset-class-list + ".#{$util-prefix}offset-#{$i}";
   @if ($i < $grid-columns) {
     $grid-offset-class-list: $grid-offset-class-list + ", ";
   }
@@ -212,10 +206,8 @@ $grid-offset-class-list: "";
 
 #{$grid-offset-class-list} {
   margin-left: calc(
-    (
-        (100% - (var(--grid-columns) - 1) * var(--column-gap)) *
-          var(--column-offset) / var(--grid-columns)
-      ) + var(--column-offset) * var(--column-gap)
+    ((100% - (var(--grid-columns) - 1) * var(--column-gap)) * var(--column-offset) / var(--grid-columns)) +
+      var(--column-offset) * var(--column-gap)
   );
 }
 

@@ -18,11 +18,7 @@
   $index: string.index($string, $search);
   @if $index {
     @return string.slice($string, 1, $index - 1) + $replace +
-      str-replace(
-        string.slice($string, $index + string.length($search)),
-        $search,
-        $replace
-      );
+      str-replace(string.slice($string, $index + string.length($search)), $search, $replace);
   }
   @return $string;
 }
@@ -61,13 +57,7 @@
 }
 
 // modify color HSLA values
-@function adjust-hsla(
-  $color,
-  $hue-multiplier: 1,
-  $saturation-multiplier: 1,
-  $lightness-multiplier: 1,
-  $alpha: 1
-) {
+@function adjust-hsla($color, $hue-multiplier: 1, $saturation-multiplier: 1, $lightness-multiplier: 1, $alpha: 1) {
   $color: str-replace($color, "var(");
   $color: str-replace($color, ")");
   $color-h: var(#{$color + "-h"});
@@ -108,10 +98,7 @@
     $character: string.slice($value, $i, $i);
 
     @if not(index(map-keys($numbers), $character) or $character == ".") {
-      @return to-length(
-        if($minus, -$result, $result),
-        string.slice($value, $i)
-      );
+      @return to-length(if($minus, -$result, $result), string.slice($value, $i));
     }
 
     @if $character == "." {
@@ -301,8 +288,7 @@ $radius: (
 
 // shadow
 $shadow: (
-  "ring":
-    "0 0 0 1px hsla(var(--color-black-h), var(--color-black-s), var(--color-black-l), 0.05)",
+  "ring": "0 0 0 1px hsla(var(--color-black-h), var(--color-black-s), var(--color-black-l), 0.05)",
   "xs":
     "0 0 0 1px hsla(var(--color-black-h), var(--color-black-s), var(--color-black-l), 0.02), 0 1px 3px -1px hsla(var(--color-black-h), var(--color-black-s), var(--color-black-l), 0.2)",
   "sm":
@@ -317,10 +303,8 @@ $shadow: (
 
 // inner-glow
 $inner-glow: (
-  "glow":
-    "inset 0 0 0.5px 1px hsla(var(--color-white-h), var(--color-white-s), var(--color-white-l), 0.075)",
-  "glow-top":
-    "inset 0 1px 0.5px hsla(var(--color-white-h), var(--color-white-s), var(--color-white-l), 0.075)",
+  "glow": "inset 0 0 0.5px 1px hsla(var(--color-white-h), var(--color-white-s), var(--color-white-l), 0.075)",
+  "glow-top": "inset 0 1px 0.5px hsla(var(--color-white-h), var(--color-white-s), var(--color-white-l), 0.075)",
 ) !default;
 
 // ease
@@ -443,7 +427,7 @@ $colors: (
     "bg": (
       "darker": "232, 7%, 8%",
       "dark": "233, 8%, 11%",
-      "base": "232, 11%, 15%",
+      "base": "0, 0%, 0%",
       "light": "233, 8%, 19%",
       "lighter": "232, 7%, 22%",
     ),
