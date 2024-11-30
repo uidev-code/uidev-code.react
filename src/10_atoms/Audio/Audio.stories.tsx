@@ -1,23 +1,21 @@
-import type { Meta, StoryObj } from "@storybook/react";
-
+import { Meta, Story } from "@storybook/react";
 import { Audio } from "./Audio";
 import { withPerformance } from "storybook-addon-performance";
 
-const meta = {
+const meta: Meta<typeof Audio> = {
   title: "Atoms/Media",
   component: Audio,
   parameters: {
     layout: "centered",
   },
-  argTypes: {},
   decorators: [withPerformance],
   tags: ["media"],
-} satisfies Meta<typeof Audio>;
+};
 
 export default meta;
-type Story = StoryObj<typeof meta>;
 
-export const audioExample: Story = {
+export const audioExample: Story<typeof Audio> = {
+  name: "Audio",
   args: {
     sources: [
       { src: "http://www.hochmuth.com/mp3/Haydn_Cello_Concerto_D-1.mp3", type: "audio/mpeg" },
@@ -30,4 +28,5 @@ export const audioExample: Story = {
     muted: false,
     alt: "Your browser does not support the audio tag.",
   },
+  render: (args: any) => <Audio {...args} />,
 };

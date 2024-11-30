@@ -1,23 +1,21 @@
-import type { Meta, StoryObj } from "@storybook/react";
-
+import { Meta, Story } from "@storybook/react";
 import { Video } from "./Video";
 import { withPerformance } from "storybook-addon-performance";
 
-const meta = {
+const meta: Meta<typeof Video> = {
   title: "Atoms/Media",
   component: Video,
   parameters: {
     layout: "centered",
   },
-  argTypes: {},
   decorators: [withPerformance],
   tags: ["media"],
-} satisfies Meta<typeof Video>;
+};
 
 export default meta;
-type Story = StoryObj<typeof meta>;
 
-export const videoExample: Story = {
+export const videoExample: Story<typeof Video> = {
+  name: "Video",
   args: {
     sources: [
       { src: "http://media.w3.org/2010/05/sintel/trailer.mp4", type: "video/mp4" },
@@ -33,4 +31,5 @@ export const videoExample: Story = {
     muted: false,
     alt: "Your browser does not support the video tag.",
   },
+  render: (args: any) => <Video {...args} />,
 };
