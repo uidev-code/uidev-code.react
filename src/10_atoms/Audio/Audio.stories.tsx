@@ -1,4 +1,4 @@
-import { Meta, Story } from "@storybook/react";
+import { type Meta, type StoryObj } from "@storybook/react";
 import { Audio } from "./Audio";
 import { withPerformance } from "storybook-addon-performance";
 
@@ -14,7 +14,7 @@ const meta: Meta<typeof Audio> = {
 
 export default meta;
 
-export const audioExample: Story<typeof Audio> = {
+export const audioExampleStory: StoryObj<typeof Audio> = {
   name: "Audio",
   args: {
     sources: [
@@ -28,5 +28,5 @@ export const audioExample: Story<typeof Audio> = {
     muted: false,
     alt: "Your browser does not support the audio tag.",
   },
-  render: (args: any) => <Audio {...args} />,
+  render: (args) => <Audio {...args} />,
 };

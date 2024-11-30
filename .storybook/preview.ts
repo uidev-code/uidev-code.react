@@ -1,5 +1,6 @@
 import type { Preview } from "@storybook/react";
 
+import "./storybook.scss";
 import "../src/assets/scss/_reset.scss";
 import "../src/assets/scss/_fonts.scss";
 import "../src/assets/scss/_typo.scss";
@@ -12,6 +13,12 @@ const preview: Preview = {
       matchers: {
         color: /(background|color)$/i,
         date: /Date$/i,
+      },
+    },
+
+    options: {
+      storySort: {
+        method: "alphabetical",
       },
     },
   },

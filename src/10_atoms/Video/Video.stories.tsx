@@ -1,4 +1,4 @@
-import { Meta, Story } from "@storybook/react";
+import { type Meta, type StoryObj } from "@storybook/react";
 import { Video } from "./Video";
 import { withPerformance } from "storybook-addon-performance";
 
@@ -14,7 +14,7 @@ const meta: Meta<typeof Video> = {
 
 export default meta;
 
-export const videoExample: Story<typeof Video> = {
+export const videoExampleStory: StoryObj<typeof Video> = {
   name: "Video",
   args: {
     sources: [

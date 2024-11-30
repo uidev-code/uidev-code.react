@@ -1,4 +1,4 @@
-import { Meta, Story } from "@storybook/react";
+import { type Meta, type StoryObj } from "@storybook/react";
 import { Img } from "./Img";
 import { withPerformance } from "storybook-addon-performance";
 
@@ -20,7 +20,7 @@ const meta: Meta<typeof Img> = {
 
 export default meta;
 
-export const ImgExample1: Story<typeof Img> = {
+export const ImgExample1Story: StoryObj<typeof Img> = {
   name: "Image",
   args: {
     src: "https://picsum.photos/600/600",
@@ -28,5 +28,5 @@ export const ImgExample1: Story<typeof Img> = {
     loading: "eager",
     aspectRatio: "1:1",
   },
-  render: (args: any) => <Img {...args} />,
+  render: (args) => <Img {...args} />,
 };
