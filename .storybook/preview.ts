@@ -15,8 +15,8 @@ const preview: Preview = {
         date: /Date$/i,
       },
     },
-
     options: {
+      panelPosition: "bottom",
       storySort: {
         method: "alphabetical",
       },

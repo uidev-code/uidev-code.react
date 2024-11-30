@@ -11,7 +11,7 @@ const meta: Meta<typeof Button> = {
   args: {},
   argTypes: {},
   decorators: [withPerformance],
-  tags: ["tags"],
+  tags: ["button"],
 };
 
 export default meta;
@@ -19,7 +19,7 @@ export default meta;
 export const ButtonTextStory: StoryObj<typeof Button> = {
   name: "Button",
   args: {
-    btnText: "Button Text",
+    btnText: "Button",
     btnType: "contained",
     btnSize: "md",
     btnColorType: "primary",
@@ -28,6 +28,7 @@ export const ButtonTextStory: StoryObj<typeof Button> = {
     btnExpanded: false,
     btnRightIcon: false,
     btnIconOnly: false,
+    btnLoading: false,
   },
   render: (args) => <Button {...args} />,
 };
@@ -35,7 +36,7 @@ export const ButtonTextStory: StoryObj<typeof Button> = {
 export const ButtonIconStory: StoryObj<typeof Button> = {
   name: "Icon Button",
   args: {
-    btnText: "Button Text",
+    btnText: "Button",
     btnType: "contained",
     btnSize: "md",
     btnColorType: "primary",
@@ -45,6 +46,7 @@ export const ButtonIconStory: StoryObj<typeof Button> = {
     btnIcon: <i className="bx bx-universal-access" />,
     btnRightIcon: false,
     btnIconOnly: false,
+    btnLoading: false,
   },
   render: (args) => <Button {...args} />,
 };
@@ -52,7 +54,7 @@ export const ButtonIconStory: StoryObj<typeof Button> = {
 export const ButtonIconOnlyStory: StoryObj<typeof Button> = {
   name: "Icon Only Button",
   args: {
-    btnText: "Button Text",
+    btnText: "Button",
     btnType: "contained",
     btnSize: "md",
     btnColorType: "primary",
@@ -62,6 +64,25 @@ export const ButtonIconOnlyStory: StoryObj<typeof Button> = {
     btnIcon: <i className="bx bx-universal-access" />,
     btnRightIcon: false,
     btnIconOnly: true,
+    btnLoading: false,
+  },
+  render: (args) => <Button {...args} />,
+};
+
+export const ButtonLoadingStory: StoryObj<typeof Button> = {
+  name: "Loading Button",
+  args: {
+    btnText: "Button",
+    btnType: "contained",
+    btnSize: "md",
+    btnColorType: "primary",
+    btnFullWidth: false,
+    btnDisabled: false,
+    btnExpanded: false,
+    btnIcon: <i className="bx bx-universal-access" />,
+    btnRightIcon: false,
+    btnIconOnly: false,
+    btnLoading: true,
   },
   render: (args) => <Button {...args} />,
 };

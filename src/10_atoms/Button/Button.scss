@@ -82,6 +82,26 @@
       padding: var(--space-xs);
     }
   }
+
+  &.btn-loading {
+    cursor: not-allowed;
+    pointer-events: none;
+
+    .btn-spin-icon {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-icon,
+    .btn-text {
+      visibility: hidden;
+    }
+  }
 }
 
 // primary
