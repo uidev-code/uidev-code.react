@@ -21,7 +21,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 export const Button: React.FC<ButtonProps> = ({
   btnType = "contained",
-  btnText = "Button Text",
+  btnText = "Button",
   btnSize = "md",
   customClass = "",
   btnColorType = "primary",
@@ -54,7 +54,7 @@ export const Button: React.FC<ButtonProps> = ({
       aria-pressed={typeof btnPressed === "boolean" ? btnPressed : undefined}
       aria-disabled={typeof btnDisabled === "boolean" ? btnDisabled : undefined}
       aria-expanded={typeof btnExpanded === "boolean" ? btnExpanded : undefined}
-      disabled={btnLoading || btnDisabled}
+      disabled={btnDisabled}
       {...restProps}
     >
       {btnLoading && (

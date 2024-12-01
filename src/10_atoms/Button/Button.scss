@@ -1,4 +1,4 @@
-@use "../../assets/scss/_config" as *;
+@use "@styles/_config" as *;
 
 .btn {
   position: relative;
@@ -12,7 +12,7 @@
   padding: var(--space-2xs) var(--space-sm);
   border-radius: var(--radius-sm);
 
-  font-size: var(--text-base);
+  font-size: 1em;
   font-weight: 500;
   color: var(--color-contrast-higher);
   line-height: 1.2;
@@ -20,6 +20,8 @@
 
   transition: 0.2s;
   will-change: transform;
+
+  min-width: 95px;
 
   gap: 5px;
 
@@ -286,4 +288,11 @@
   &.btn-text {
     color: var(--color-warning-darker);
   }
+}
+
+.btn-disabled,
+.btn[disabled],
+.btn[readonly] {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
