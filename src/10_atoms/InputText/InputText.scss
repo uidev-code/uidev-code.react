@@ -1,6 +1,7 @@
 @use "@styles/_config" as *;
 
 .field-box {
+  position: relative;
   display: flex;
   flex-direction: column;
   border-radius: var(--radius-sm);

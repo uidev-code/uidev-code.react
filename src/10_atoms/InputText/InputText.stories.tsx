@@ -4,7 +4,7 @@ import { Button } from "@atoms/Button/Button";
 import { withPerformance } from "storybook-addon-performance";
 
 const meta: Meta<typeof InputText> = {
-  title: "Atoms/Forms",
+  title: "Atoms/Forms/InputText",
   component: InputText,
   parameters: {
     layout: "centered",
@@ -30,6 +30,7 @@ export const InputNoLabelFieldStory: StoryObj<typeof InputText> = {
     labelText: "",
     ariaLabel: "aria label text",
     alignHorizontal: true,
+    labelRequired: false,
     autocomplete: "off",
     inputIcon: "",
     inputWithButton: "",
@@ -51,6 +52,7 @@ export const InputFieldStory: StoryObj<typeof InputText> = {
     labelText: "label text",
     ariaLabel: "",
     alignHorizontal: true,
+    labelRequired: true,
     autocomplete: "off",
     inputIcon: "",
     inputWithButton: "",
@@ -72,6 +74,7 @@ export const InputIconFieldButtonStory: StoryObj<typeof InputText> = {
     labelText: "label text",
     ariaLabel: "",
     alignHorizontal: true,
+    labelRequired: true,
     autocomplete: "off",
     inputIcon: "",
     inputWithButton: (
