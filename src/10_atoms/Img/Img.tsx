@@ -13,7 +13,7 @@ export interface ImgProps extends ComponentProps<"div"> {
 export const Img = ({ src, alt, loading = "eager", aspectRatio = "default", className, ...restProps }: ImgProps) => {
   const mediaAspectRatio = aspectRatio && aspectRatio !== "default" ? `aspect-ratio-${aspectRatio}` : "";
   return (
-    <div className={classnames("ud-img", mediaAspectRatio, className)} {...restProps}>
+    <div className={classnames("img-media-wrapper", mediaAspectRatio, className)} {...restProps}>
       <img src={src} alt={alt} {...(loading === "lazy" && { loading })} />
     </div>
   );

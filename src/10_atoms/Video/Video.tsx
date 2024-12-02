@@ -31,7 +31,7 @@ export const Video = ({
   const mediaAspectRatio = aspectRatio && aspectRatio !== "default" ? `aspect-ratio-${aspectRatio}` : "";
 
   return (
-    <div className={classnames("ud-video", mediaAspectRatio, className)} {...restProps}>
+    <div className={classnames("video-media-wrapper", mediaAspectRatio, className)} {...restProps}>
       <video autoPlay={autoplay} controls={controls} loop={loop} muted={muted} preload={preload} poster={posterUrl}>
         {sources.map(({ src, type }, index) => (
           <source key={index} src={src} type={type} />
