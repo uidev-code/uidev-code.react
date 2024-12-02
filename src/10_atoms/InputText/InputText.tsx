@@ -11,6 +11,7 @@ export interface InputTextProps extends ComponentProps<"div"> {
   placeholder?: string;
   autocomplete?: "off" | "on";
   labelText?: string;
+  labelRequired?: boolean;
   ariaLabel?: string;
   isInvalid?: boolean;
   errorText?: string;
@@ -28,6 +29,7 @@ export const InputText = ({
   placeholder,
   autocomplete,
   labelText,
+  labelRequired,
   ariaLabel,
   isInvalid,
   errorText,
@@ -51,6 +53,7 @@ export const InputText = ({
       {labelText && (
         <label htmlFor={inputId} className="form-label">
           {labelText}
+          {labelRequired && <span className="is-required">*</span>}
         </label>
       )}
 
