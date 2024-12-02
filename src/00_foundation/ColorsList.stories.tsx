@@ -1,5 +1,5 @@
 import { type Meta, type StoryObj } from "@storybook/react";
-import { ColorsList } from "./colorsList";
+import { ColorsList } from "./ColorsList";
 import { withPerformance } from "storybook-addon-performance";
 
 const meta: Meta<typeof ColorsList> = {
