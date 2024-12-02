@@ -266,3 +266,26 @@ $grid-offset-class-list: "";
     }
   }
 }
+
+// bg color
+$color-labels: map.get($colors, "default");
+@each $main-color, $variation-array in $color-labels {
+  $main-color-label: "-#{$main-color}";
+  @if $main-color == "bg" {
+    $main-color-label: "";
+  }
+  @each $variation, $hsl in $variation-array {
+    $appendix: #{"-" + $variation};
+    @if $variation == "base" {
+      $appendix: "";
+    }
+    .#{$util-prefix}bg#{$main-color-label}#{$appendix} {
+      background-color: hsla(
+        var(--color-#{$main-color}#{$appendix}-h),
+        var(--color-#{$main-color}#{$appendix}-s),
+        var(--color-#{$main-color}#{$appendix}-l),
+        var(--bg-opacity, 1)
+      );
+    }
+  }
+}

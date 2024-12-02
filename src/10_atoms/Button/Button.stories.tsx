@@ -34,7 +34,7 @@ export const ButtonTextStory: StoryObj<typeof Button> = {
 };
 
 export const ButtonIconStory: StoryObj<typeof Button> = {
-  name: "Icon Button",
+  name: "Icon Text Button",
   args: {
     btnText: "Button",
     btnType: "contained",

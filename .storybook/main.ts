@@ -26,6 +26,7 @@ const config: StorybookConfig = {
       alias: {
         "@.storybook": path.resolve(__dirname, ".storybook"),
         "@": path.resolve(__dirname, "../src"),
+        "@foundation": path.resolve(__dirname, "../src/00_foundation"),
         "@atoms": path.resolve(__dirname, "../src/10_atoms"),
         "@molecules": path.resolve(__dirname, "../src/20_molecules"),
         "@organisms": path.resolve(__dirname, "../src/30_organisms"),

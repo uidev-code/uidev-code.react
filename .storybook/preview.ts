@@ -32,7 +32,7 @@ const preview: Preview = {
     withThemeByClassName({
       themes: {
         light: "",
-        dark: "dark",
+        dark: "theme-dark",
       },
       defaultTheme: "light",
     }),
