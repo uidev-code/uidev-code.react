@@ -1,17 +1,28 @@
 import classnames from "classnames";
 import type { ComponentProps } from "react";
 
+import { Img } from "../Img/Img";
+
 import "./Avatar.scss";
 
 export interface AvatarProps extends ComponentProps<"div"> {
-  avatarColorType: "primary" | "secondary" | "accent" | "contrast" | "success" | "error" | "warning";
-  avatarSize: "sm" | "md" | "lg";
+  avatarImgURL: string;
+  avatarAltText: string;
+  avatarFallbackText: string;
 }
 
-export const Avatar = ({ className, children, ...restProps }: AvatarProps) => {
+export const Avatar = ({
+  avatarImgURL,
+  avatarAltText,
+  avatarFallbackText,
+  className,
+  children,
+  ...restProps
+}: AvatarProps) => {
   return (
     <div className={classnames("ud-avatar", className)} {...restProps}>
-      {children}
+      <Img src={avatarImgURL} alt={avatarAltText} />
+      <div className="avatar-fallback">{avatarFallbackText}</div>
     </div>
   );
 };

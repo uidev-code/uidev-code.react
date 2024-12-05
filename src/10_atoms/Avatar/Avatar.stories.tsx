@@ -14,8 +14,12 @@ const meta: Meta<typeof Avatar> = {
 
 export default meta;
 
-export const AvatarExampleStory: StoryObj<typeof Avatar> = {
+export const AvatarImageStory: StoryObj<typeof Avatar> = {
   name: "Avatar",
-  args: {},
+  args: {
+    avatarImgURL: "https://avatars.githubusercontent.com/u/124599?v=4",
+    avatarAltText: "ugoon",
+    avatarFallbackText: "UG",
+  },
   render: (args) => <Avatar {...args} />,
 };

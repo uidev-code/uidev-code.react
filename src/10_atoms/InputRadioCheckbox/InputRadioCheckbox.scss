@@ -1,0 +1,122 @@
+@use "@styles/_config" as *;
+
+:root {
+  --radio-width: 20px;
+  --radio-height: 20px;
+  --radio-border-width: 1px;
+  --radio-marker-size: 8px;
+}
+
+.radio-box,
+.checkbox-box {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+
+  .radio,
+  .checkbox {
+    position: absolute;
+    padding: 0;
+    margin: 0;
+    opacity: 0;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+
+    & + label {
+      display: inline-block;
+      line-height: 1.4;
+      user-select: none;
+      cursor: pointer;
+      font-size: var(--space-base);
+
+      &::before {
+        content: "";
+        box-sizing: border-box;
+        display: inline-block;
+        vertical-align: middle;
+        margin-top: -0.2em;
+        width: var(--radio-width);
+        height: var(--radio-height);
+        background-color: var(--color-bg);
+        border-width: var(--radio-border-width);
+        border-color: alpha(var(--color-contrast-low), 0.65);
+        border-style: solid;
+        background-repeat: no-repeat;
+        background-position: center;
+        margin-right: var(--space-xs);
+        transition:
+          transform 0.2s,
+          border 0.2s;
+      }
+    }
+
+    &:not(:checked):not(:focus) + hover::before {
+      border-color: alpha(var(--color-contrast-low), 1);
+    }
+
+    // checked
+    &:checked + label::before {
+      background-color: var(--color-primary);
+      box-shadow: var(--shadow-xs);
+      border-color: var(--color-primary);
+      transition: transform 0.2s;
+    }
+
+    // active
+    &:active + label::before {
+      transform: scale(0.8);
+      transition: transform 0.2s;
+    }
+
+    // :checked:active
+    &:checked:active + label::before {
+      transform: none;
+      transition: none;
+    }
+  }
+}
+
+.radio {
+  & + label::before {
+    border-radius: 50%;
+  }
+
+  &:checked + label::before {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cg class='nc-icon-wrapper' fill='%23ffffff'%3E%3Ccircle cx='8' cy='8' r='8' fill='%23ffffff'%3E%3C/circle%3E%3C/g%3E%3C/svg%3E");
+    background-size: var(--radio-marker-size);
+  }
+}
+
+.checkbox {
+  & + label::before {
+    border-radius: var(--radius-sm);
+  }
+
+  &:checked + label::before {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpolyline points='1 6.5 4 9.5 11 2.5' fill='none' stroke='%23FFFFFF' stroke-linecap='round' stroke-linejoin='round' stroke-width='2'/%3E%3C/svg%3E");
+    background-size: var(--radio-marker-size);
+  }
+}
+
+.field-box {
+  &.is-invalid {
+    .radio-box,
+    .checkbox-box {
+      label {
+        &::before {
+          border-color: var(--color-error);
+        }
+      }
+    }
+  }
+
+  &.is-disabled,
+  &.is-readonly {
+    .radio-box,
+    .checkbox-box {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+}

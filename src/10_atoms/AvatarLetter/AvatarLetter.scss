@@ -1,0 +1,49 @@
+@use "../../assets/scss/_config" as *;
+
+.ud-avatar-letter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--avatar-width);
+  height: var(--avatar-height);
+  font-weight: 600;
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: var(--color-contrast-lower);
+  color: var(--color-contrast-higher);
+
+  &.avatar-letter-primary {
+    background-color: var(--color-primary);
+    color: var(--color-white);
+  }
+
+  &.avatar-letter-secondary {
+    background-color: var(--color-bg-darker);
+    color: var(--color-contrast-higher);
+  }
+
+  &.avatar-letter-accent {
+    background-color: var(--color-accent);
+    color: var(--color-white);
+  }
+
+  &.avatar-letter-contrast {
+    background: alpha(var(--color-contrast-higher), 0.95);
+    color: var(--color-bg);
+  }
+
+  &.avatar-letter-success {
+    background-color: var(--color-success);
+    color: var(--color-white);
+  }
+
+  &.avatar-letter-error {
+    background-color: var(--color-error);
+    color: var(--color-white);
+  }
+
+  &.avatar-letter-warning {
+    background-color: var(--color-warning);
+    color: var(--color-contrast-higher);
+  }
+}

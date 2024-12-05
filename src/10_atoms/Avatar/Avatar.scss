@@ -1,0 +1,33 @@
+@use "../../assets/scss/_config" as *;
+
+.ud-avatar {
+  position: relative;
+
+  & > .img-media-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: var(--avatar-width);
+    height: var(--avatar-height);
+    z-index: 2;
+    border-radius: 50%;
+    overflow: hidden;
+  }
+
+  & > .avatar-fallback {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: var(--avatar-width);
+    height: var(--avatar-height);
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    border-radius: 50%;
+    overflow: hidden;
+    background-color: var(--color-contrast-lower);
+    color: var(--color-contrast-higher);
+  }
+}
