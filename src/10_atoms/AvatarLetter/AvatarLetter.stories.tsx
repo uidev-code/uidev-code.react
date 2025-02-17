@@ -3,7 +3,7 @@ import { AvatarLetter } from "./AvatarLetter";
 import { withPerformance } from "storybook-addon-performance";
 
 const meta: Meta<typeof AvatarLetter> = {
-  title: "Atoms",
+  title: "Atoms/Avatar",
   component: AvatarLetter,
   parameters: {
     layout: "centered",

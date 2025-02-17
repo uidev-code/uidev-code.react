@@ -57,30 +57,32 @@ export const InputText = ({
         </label>
       )}
 
-      <div className={fieldClass}>
-        {inputIcon}
-        <input
-          type={inputType}
-          id={inputId}
-          name={inputName}
-          className={inputClass}
-          placeholder={placeholder}
-          disabled={inputDisabled}
-          readOnly={inputReadonly}
-          aria-invalid={isInvalid || undefined}
-          aria-describedby={errorId}
-          aria-disabled={inputDisabled || undefined}
-          aria-readonly={inputReadonly || undefined}
-          aria-label={ariaLabel !== "" ? ariaLabel : undefined}
-          autocomplete={autocomplete !== "" ? autocomplete : undefined}
-        />
-        {inputWithButton}
+      <div className="field-inbox">
+        <div className={fieldClass}>
+          {inputIcon}
+          <input
+            type={inputType}
+            id={inputId}
+            name={inputName}
+            className={inputClass}
+            placeholder={placeholder}
+            disabled={inputDisabled}
+            readOnly={inputReadonly}
+            aria-invalid={isInvalid || undefined}
+            aria-describedby={errorId}
+            aria-disabled={inputDisabled || undefined}
+            aria-readonly={inputReadonly || undefined}
+            aria-label={ariaLabel !== "" ? ariaLabel : undefined}
+            autocomplete={autocomplete !== "" ? autocomplete : undefined}
+          />
+          {inputWithButton}
+        </div>
+        {isInvalid && errorText && (
+          <p id={errorId} className="error">
+            {errorText}
+          </p>
+        )}
       </div>
-      {isInvalid && errorText && (
-        <p id={errorId} className="error">
-          {errorText}
-        </p>
-      )}
     </div>
   );
 };

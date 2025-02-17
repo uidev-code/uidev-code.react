@@ -11,6 +11,7 @@
   overflow: hidden;
   background-color: var(--color-contrast-lower);
   color: var(--color-contrast-higher);
+  line-height: 1;
 
   &.avatar-letter-primary {
     background-color: var(--color-primary);
